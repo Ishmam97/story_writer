@@ -54,7 +54,7 @@ class SweTasks:
                 Include the following in your description:
                 - Scene setting (location, time of day, weather)
                 - Character actions and interactions
-                - Dialogue (if any)
+                - Dialogue (or narration if needed)
                 - Character emotions and expressions and movements
                 - Camera angles and movements
 
