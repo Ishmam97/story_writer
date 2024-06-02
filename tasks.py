@@ -11,6 +11,8 @@ class SweTasks:
                 The story should be engaging and have a good moral lesson.\
                 It should be suitable for children under 13 years old and have a good moral lesson.\
                 The story should not be too short.
+
+                The final answer must be the full story and nothing else.
                 """),
             agent=agent,
             expected_output="Story written with engaging content and a good moral lesson."
@@ -27,11 +29,9 @@ class SweTasks:
                  
                 Include the following in your description:
                 - Physical appearance
-                - Personality traits
                 - Clothing style
-
-                Your final answer must be the full character description.
-                It should be in JSON format with the character name as the key and the description as the value.
+                - Creature type
+                Your final answer must be the full character description. In Json format and return only the Json object and nothing else.
                 """),
             agent=agent,
             expected_output="The full characters descriptions in JSON format.",
@@ -41,7 +41,7 @@ class SweTasks:
     def direct_movie(self, agent, story_task, descriptions_task):
         return Task(
             description=dedent(f"""\
-                Create scenes for a short movie based on the following story, sectioning the\
+                Create scenes for a movie based on the following story, sectioning the\
                 scenes to ensure the scenes capture the parts of the plot development properly. The story is as follows:
                 ------------
                 {story_task.output}
@@ -58,7 +58,7 @@ class SweTasks:
                 - Character emotions and expressions and movements
                 - Camera angles and movements
 
-                Your final answer must be the full scene descriptions and scene numbers in JSON format.
+                Your final answer must be the full scene descriptions and scene numbers in JSON format. The full story must be covered. It should be only the JSON object and nothing else.
                 """),
             agent=agent,
             expected_output="The full scene descriptions in JSON format.",
