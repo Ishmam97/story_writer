@@ -8,9 +8,8 @@ class SweTasks:
                 Write a children's story with the following idea: 
                 ------------
                 {idea}
-                The story should be engaging and have a good moral lesson.\
                 It should be suitable for children under 13 years old and have a good moral lesson.\
-                The story should not be too short.
+                The story should not be too short and have engaging and meaningful dialogue.\
 
                 The final answer must be the full story and nothing else.
                 """),
@@ -31,56 +30,50 @@ class SweTasks:
                 - Physical appearance
                 - Clothing style
                 - Creature type
-                Your final answer must be the full character description. In Json format and return only the Json object and nothing else.
+                Your final answer must be the full character description. In Json format and return only the Json object and only the JSON and no other text after.
                 """),
             agent=agent,
-            expected_output="The full characters descriptions in JSON format.",
+            expected_output="The full characters descriptions in JSON format and only the JSON and no other text after.",
             context=[story_task]
         )
 
     def direct_movie(self, agent, story_task, descriptions_task):
         return Task(
             description=dedent(f"""\
-                Create scenes for a movie based on the following story, sectioning the\
-                scenes to ensure the scenes capture the parts of the plot development properly. The story is as follows:
+                Create scenes for turning the story into a movie, do not deviate from the story and ensure all characters and the entire story is covered.\
+                Story:
                 ------------
                 {story_task.output}
-                -------------
-                and the character descriptions:
                 ------------
-                {descriptions_task.output}
-                ------------
-                The scenes should be vivid and engaging, and should be suitable for a movie.\
-                Include the following in your description:
-                - Scene setting (location, time of day, weather)
-                - Character actions and interactions
-                - Dialogue (or narration if needed)
-                - Character emotions and expressions and movements
-                - Camera angles and movements
-
-                Your final answer must be the full scene descriptions and scene numbers in JSON format. The full story must be covered. It should be only the JSON object and nothing else.
+                The final answer should be an array of JSON objects containing,
+                - Scene description
+                - Character or narrator dialogue in the scene
+                Your answer should be in the following format:
+                [{{
+                    
+                    "Scene_description": "Description of the envioronment, setting and summary of the scene, and characters in the scene",
+                    "character_name": "dialogue of the character in the scene or narration from narrator if no character is speaking",
+                }}]
                 """),
             agent=agent,
-            expected_output="The full scene descriptions in JSON format.",
+            expected_output="The full scene descriptions in JSON format. only the JSON and no other text after.",
             context=[story_task, descriptions_task]
         )
-
-    def testing_task(self, agent, code):
+    
+    def edit_movie(self, agent, story_task, script_task):
         return Task(
             description=dedent(f"""\
-                You are writing tests for the React component for the following code:
-                Code to test:
-                ------------
-                {code}
-
-                Include tests for the following:
-                - Test the component renders correctly
-                - Test the component renders the correct data
-                - Test the component handles user input correctly
-                - Test the component handles errors correctly
                 
-                Your final answer must be the full testing code, only the test code and nothing else.
+                ------------
+                Story:
+                {story_task.output}
+                ------------
+                Script:
+                {script_task.output}
+                ------------
+                
                 """),
             agent=agent,
-            expected_output="The complete test code for the React component."
+            expected_output="The complete script with all sections covered.",
+            context=[story_task, script_task]
         )

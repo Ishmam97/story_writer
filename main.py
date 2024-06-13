@@ -27,6 +27,7 @@ class CustomCrew:
         story_writer = agents.story_writer()
         character_detailer = agents.character_detailer()
         director = agents.director()
+        editor = agents.editor()
 
         # Create tasks
         story_writer_task = tasks.write_story(story_writer, self.idea)
@@ -43,13 +44,14 @@ class CustomCrew:
         results = crew.kickoff()
 
         print("\n\n########################")
-        print("## Here is your ccharacter_detailer_task esult:")
+        print("## Here is your character_detailer_task result:")
         print(character_detailer_task.output.exported_output)
 
         # Save each task's output
         self.save_output(output_folder, "story.txt", story_writer_task.output.exported_output)
         self.save_output(output_folder, "character_descriptions.json", character_detailer_task.output.exported_output)
         self.save_output(output_folder, "scene_descriptions.json", director_task.output.exported_output)
+
 
         return results
 

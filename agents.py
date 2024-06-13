@@ -57,3 +57,17 @@ class CustomAgents:
             llm=self.LLAMA3,
             allow_delegation=False,
         )
+
+    def editor(self):
+        return Agent(
+            role='editor',
+            backstory=dedent("""
+                An editor with a sharp eye for detail and ensuring completeness of content.
+            """),
+            goal=dedent("""
+                Ensure the script covers the entire story, filling in any missing parts if necessary.
+            """),
+            verbose=True,
+            llm=self.LLAMA3,
+            allow_delegation=False,
+        )
