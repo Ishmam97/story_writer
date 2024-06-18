@@ -1,13 +1,7 @@
 # Description
 
-The idea is to build a crew of video production with ability to direct videos, write scripts and character descriptions. 
-We generate a story,
-define characters and description
-create scenes for videos
-write prompts for image / video generation
-save generation
-text to audio
-text to video
+The idea is to build a crew of video production with ability to direct videos, write scripts and character descriptions.
+We generate a story using a text prompt. CrewAI Agents generated the story, character description and scene descriptions (illustrations). This is used to prompt stable diffusion to generate images while the story is used to generate audio. Finally the images and videos are put together manually to generate a video.
 
 ## Install dependencies
 
@@ -17,16 +11,3 @@ text to video
 2. ```
    poetry shell
    ```
-3. install Ollama and pull llama3
-4. 
-
-## To Do tasks:
-
-* [X] Define Tasks for agents
-* [ ] Testing Crew Runs
-* [ ] Load Local LLMS
-* [ ] Explore free GROQ runs
-* [ ] Test Outputs
-* [ ] File editing and Codebase Scanning
-* [ ] Prepare for production
-* [ ] Deployment
