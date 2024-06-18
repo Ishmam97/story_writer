@@ -3,3 +3,7 @@
 amdgpu-install_6.0.60002-1_all.deb
 __pycache__/
 outputs/
+TODO
+*.webm
+*.wmv
+test.py

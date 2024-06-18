@@ -45,12 +45,12 @@ class CustomAgents:
 
     def director(self):
         return Agent(
-            role='director',
+            role='illustrator',
             backstory=dedent("""
-                A director with a keen eye for setting up scenes and environments.
+                An illustrator with who comes up with vivid descriptions for scenes.
             """),
             goal=dedent("""
-                Create vivid scene descriptions for directing a video.
+                Create vivid illustration descriptions for directing a motion picture film.
             """),
             # Add tools if necessary, e.g., tools=[tool_1, tool_2],
             verbose=True,

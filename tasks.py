@@ -11,10 +11,10 @@ class SweTasks:
                 It should be suitable for children under 13 years old and have a good moral lesson.\
                 The story should not be too short and have engaging and meaningful dialogue.\
 
-                The final answer must be the full story and nothing else.
+                The final answer must be the full story and no other text before or after.
                 """),
             agent=agent,
-            expected_output="Story written with engaging content and a good moral lesson."
+            expected_output="Story written with engaging content and a good moral lesson and no other text before or after."
         )
 
     def describe_characters_task(self, agent, story_task):
@@ -30,33 +30,30 @@ class SweTasks:
                 - Physical appearance
                 - Clothing style
                 - Creature type
-                Your final answer must be the full character description. In Json format and return only the Json object and only the JSON and no other text after.
+                Your final answer must be the full character description in a paragraph, each character separated by a new line, no other text after.
                 """),
             agent=agent,
-            expected_output="The full characters descriptions in JSON format and only the JSON and no other text after.",
+            expected_output="The full characters descriptions as a string no other text after.",
             context=[story_task]
         )
 
     def direct_movie(self, agent, story_task, descriptions_task):
         return Task(
             description=dedent(f"""\
-                Create scenes for turning the story into a movie, do not deviate from the story and ensure all characters and the entire story is covered.\
+                Create descriptions for illustrating the following story into scenes\
+                Only mention the species or description of the character and not the name. such as "orange cat" instead of "Garfield" for ALL ILLUSTRATIONS and CHARACTERS.
                 Story:
                 ------------
                 {story_task.output}
                 ------------
-                The final answer should be an array of JSON objects containing,
-                - Scene description
-                - Character or narrator dialogue in the scene
+                The final answer should be an array strings containing only a short description of each illustration. The story should be broken down into meaningful chunks for the illustration.
+                The description should contain the description of the scenery and character.
                 Your answer should be in the following format:
-                [{{
-                    
-                    "Scene_description": "Description of the envioronment, setting and summary of the scene, and characters in the scene",
-                    "character_name": "dialogue of the character in the scene or narration from narrator if no character is speaking",
-                }}]
+                ["a one sentence description of scene 1", "scene 2 description" ...]
+                there should be no extra text or note before or after the array.
                 """),
             agent=agent,
-            expected_output="The full scene descriptions in JSON format. only the JSON and no other text after.",
+            expected_output="The full scene descriptions in an array of strings and no other text after.",
             context=[story_task, descriptions_task]
         )
     
