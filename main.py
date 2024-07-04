@@ -10,7 +10,9 @@ import requests
 import base64
 import time
 from dotenv import load_dotenv
+
 load_dotenv()
+
 class CustomCrew:
     def __init__(self, idea):
         self.idea = idea
@@ -32,7 +34,7 @@ class CustomCrew:
         story_writer = agents.story_writer()
         character_detailer = agents.character_detailer()
         director = agents.director()
-        editor = agents.editor()
+        # editor = agents.editor()
 
         # Create tasks
         story_writer_task = tasks.write_story(story_writer, self.idea)
@@ -131,18 +133,18 @@ if __name__ == "__main__":
     print("\n\n########################")
     print("## Here is your custom crew run result:")
     print("########################\n")
-
+    print(result)
     # Read scene_descriptions.txt file from outputs/{run_id}/scene_descriptions.txt
-    scene_descriptions = read_array_from_file(f"outputs/{run_id}/scene_descriptions.txt")
+    # scene_descriptions = read_array_from_file(f"outputs/{run_id}/scene_descriptions.txt")
 
-    # Generate images from scene descriptions
-    generate_images_from_scene_descriptions(run_id, scene_descriptions)
+#     # Generate images from scene descriptions
+#     generate_images_from_scene_descriptions(run_id, scene_descriptions)
 
-    print("Transcribing Audio...")
-# sleep for 5 seconds to simulate audio transcription
-    time.sleep(5)
-    print("Audio Transcription Complete!")
+#     print("Transcribing Audio...")
+# # sleep for 5 seconds to simulate audio transcription
+#     time.sleep(5)
+#     print("Audio Transcription Complete!")
     
-    print("Video Compilation...")
-    time.sleep(5)
-    print("Video Compilation Complete!")
+#     print("Video Compilation...")
+#     time.sleep(5)
+#     print("Video Compilation Complete!")

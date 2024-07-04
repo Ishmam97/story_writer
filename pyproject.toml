@@ -5,6 +5,7 @@ description = "a Story and Script production crew"
 authors = ["Ishmam Ahmed Solaiman"]
 
 [tool.poetry.dependencies]
+openai = "*"
 python = ">=3.10.0, <3.12"
 crewai = "*"
 unstructured = "==0.10.2"
