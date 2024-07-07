@@ -68,20 +68,45 @@ class SweTasks:
             context=[story_task, descriptions_task]
         )
     
-    def edit_movie(self, agent, story_task, script_task):
+    def edit_movie(self, agent, script_task, charcter_description_task):
         return Task(
             description=dedent(f"""\
-                
+                From the character descriptions and the script, create descriptions for 6 frames with one sentence descriptions for a motion picture.
                 ------------
-                Story:
-                {story_task.output}
-                ------------
+                Character Descriptions:
+                {charcter_description_task.output}
+                --------------
                 Script:
                 {script_task.output}
                 ------------
+
+                output should be an array of strings with atleast 15 frame description.
+                The output should be an array only with frame descriptions, no other text before or after.
                 
                 """),
             agent=agent,
             expected_output="The complete script with all sections covered.",
-            context=[story_task, script_task]
+            context=[script_task, charcter_description_task]
+        )
+    
+    def image_prompter(self, agent, illustration_task, character_description_task):
+        return Task(
+            description=dedent(f"""\
+                               
+                Generate image prompts for each scene description and you can refer to character descriptions.:
+                
+                Scene descriptions:
+                ------------
+                {illustration_task.output}
+                ------------
+
+
+                Be specific and descriptive: Instead of "a cat", try "a fluffy orange tabby cat sitting on a velvet cushion in a sunlit Victorian parlor" for EVERY PROMPT.
+                Use artistic terms: Incorporate words like "digital art", "oil painting", "photorealistic", or "watercolor" to influence the style.
+                Specify lighting and mood: Words like "soft morning light", "neon-lit", or "moody twilight" can dramatically affect the atmosphere.
+                The final answer should be prompts for images in the form of an array of strings.
+                """),
+            agent=agent,
+            context=[illustration_task, character_description_task],
+            expected_output="The image generated from the prompt."
         )

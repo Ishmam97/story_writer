@@ -6,9 +6,6 @@ from textwrap import dedent
 import os
 import uuid
 from datetime import datetime
-import requests
-import base64
-import time
 from dotenv import load_dotenv
 
 load_dotenv()

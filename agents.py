@@ -72,12 +72,26 @@ class CustomAgents():
         return Agent(
             role='editor',
             backstory=dedent("""
-                An editor with a sharp eye for detail and ensuring completeness of content.
+                An experienced illustrator with a knack for creating frame by frame illustrations for scenes in a motion picture.
             """),
             goal=dedent("""
-                Ensure the script covers the entire story, filling in any missing parts if necessary.
+                Ensure every scene in the script is covered.
             """),
-            llm = self.gpt35,
+            llm = self.mainModel,
             verbose=True,
-            allow_delegation=True,
+            allow_delegation=False,
+        )
+    
+    def image_propmpter(self):
+        return Agent(
+            role='image_prompter',
+            backstory=dedent("""
+                An experienced image propmter writing descriptive and specifc prompts for image generation models.
+            """),
+            goal=dedent("""
+                Ensure descriptive, vivid and specific prompts.
+            """),
+            llm = self.mainModel,
+            verbose=True,
+            allow_delegation=False,
         )
