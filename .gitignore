@@ -7,3 +7,6 @@ TODO
 *.webm
 *.wmv
 test.py
+*.ipynb_checkpoints/
+*.ipynb
+/.vscode/

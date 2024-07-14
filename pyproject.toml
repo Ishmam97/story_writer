@@ -5,13 +5,18 @@ description = "a Story and Script production crew"
 authors = ["Ishmam Ahmed Solaiman"]
 
 [tool.poetry.dependencies]
+openai = "*"
 python = ">=3.10.0, <3.12"
 crewai = "*"
 unstructured = "==0.10.2"
 tools="^0.1.9"
 python-dotenv = "1.0.0"
 tiktoken = "0.5.2"
-
+langchain-community = "*"
+flax = "^0.8.5"
+diffusers = {extras = ["torch"], version = "^0.29.2"}
+transformers = "^4.42.3"
+streamlit = "*"
 [tool.pyright]
 # https://github.com/microsoft/pyright/blob/main/docs/configuration.md
 useLibraryCodeForTypes = true
