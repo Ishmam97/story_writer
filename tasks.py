@@ -25,17 +25,23 @@ class SweTasks:
                 {story_task.output}
                 The characters can be described with rich details to make them more engaging and relatable.\
                 You have the freedom to create fantasy or realistic characters.
-                 
-                Include the following in your description answering in JSON format:
-                - appearance: Physical appearance
-                - attire: Clothing style
-                - species: Creature type
-                - extras: Any other details that make the character unique
+                Describe each character in 2-3 sentences.
+                Include the following in your description answering:
+                - species
+                - detailed physical description and clothing description.
 
-                Your final answer must be the full character description in JSON format no other text before or after.
+                The output format should be:
+                [{{
+                    "character_name": {{
+                        "species": "species",
+                        "description": "detailed description"
+                    }}
+                }}]
+
+                Your final answer must be the full character description in JSON with no other text before or after.
                 """),
             agent=agent,
-            expected_output="The full characters descriptions as a string no other text after.",
+            expected_output="The full characters descriptions as a JSON no other text after.",
             context=[story_task]
         )
 

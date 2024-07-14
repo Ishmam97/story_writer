@@ -47,7 +47,7 @@ class CustomAgents():
             goal=dedent("""
                 Describe the characters in the story with rich details.
             """),
-            llm = self.mainModel,
+            llm = self.gpt35,
             # Add tools if necessary, e.g., tools=[tool_1, tool_2],
             verbose=True,
             allow_delegation=False,

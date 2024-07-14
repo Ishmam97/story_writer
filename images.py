@@ -100,7 +100,13 @@ def generate_images_from_scene_descriptions(run_id, scene_descriptions):
 
 def generate_illustrations(filepath: str) -> list[str]:
     # file is a txt file [\n"scene1"\n"scene2"...] or it can be ["frame1","frame2"] parse the text file properly
-
+    try:
+        with open(filepath, "r") as file:
+            scenes = json.load(file)
+            frames = [scene["Setting"] for scene in scenes.values()]
+            return frames
+    except:
+        pass
     with open(filepath, "r") as file:
         content = file.read()
         # remove the new line characters and the brackets
@@ -116,18 +122,21 @@ def generate_illustrations(filepath: str) -> list[str]:
 
 def query_illustrator_llama(scene: str, character_desc: str) -> str:
     llm = Ollama(model="llama3")
-    prompt = f'''Generate a great image description for the following scene:
-    {scene} 
-    for your reference, These are the character descriptions: {character_desc}
-    To generate a great image description, Be specific and descriptive: Instead of "a cat", try "a fluffy orange tabby cat sitting on a velvet cushion in a sunlit Victorian parlor" for EVERY PROMPT.
-    Use artistic terms: Incorporate words like "digital art", "oil painting", "photorealistic", or "watercolor" to influence the style.
-    Specify lighting and mood: Words like "soft morning light", "neon-lit", or "moody twilight" can dramatically affect the atmosphere.
-    The final answer should only be the scene description and nothing else in 50 words or less.
+    prompt = f'''Generate a detailed and vivid image description for the following scene:
+    {scene}
+    Characters: {character_desc}
+    To generate an excellent image description, follow these guidelines:
+    - Be highly specific and descriptive: Instead of "a cat", describe "a fluffy orange tabby cat sitting on a velvet cushion in a sunlit Victorian parlor" for every detail.
+    - Use artistic terms to set the style: Incorporate words like "digital art", "oil painting", "photorealistic", "watercolor", or any other style descriptors that fit the scene.
+    - Specify lighting and mood: Use terms like "soft morning light", "neon-lit", "moody twilight", or other atmospheric descriptors to enhance the ambiance.
+    - Include textures and colors: Add descriptions of textures (e.g., "smooth marble floor", "rough wooden table") and colors (e.g., "emerald green", "crimson red") to enrich the imagery.
+    - Aim for clarity and conciseness: The final description should be highly descriptive yet clear, not exceeding 50 words.
+    The final answer should only be the scene description and character description in 50 words or less.
     '''
     response = llm.invoke(prompt)
     return response
 
-def generate_image_prompts(scene_filepath, character_description):
+def generate_scene_prompts(scene_filepath, character_description):
     # to string the character descriptions
     character_description = json.dumps(character_description)   
     frames = generate_illustrations(scene_filepath)
@@ -147,6 +156,8 @@ def generate_image_diffusion(model_name, prompts, negative_prompt, output_dir):
     )
 
     pipe.to('cuda')
+    # to_string negative_prompt
+    negative_prompt = json.dumps(negative_prompt)
     
     for idx, prompt in enumerate(prompts):
         image = pipe(
@@ -162,20 +173,20 @@ def generate_image_diffusion(model_name, prompts, negative_prompt, output_dir):
 
     
 def main():
-    run_id = "20240706_034332_6289cccf"
-    output_dir = "outputs/20240706_034332_6289cccf/img"
+    run_id = "20240708_044714_338a9909"
+    output_dir = f'outputs/{run_id}/img'
     os.makedirs(output_dir, exist_ok=True)
 
-    scene_filepath = f'outputs/{run_id}/illustrations.txt'
-    character_description = read_file(f'outputs/{run_id}/character_descriptions.json')
+    scene_filepath = f'outputs/{run_id}/scene_descriptions.txt'
+    character_description = read_file(f'outputs/{run_id}/character_descriptions.txt')
     
-    # image_prompts = generate_image_prompts(scene_filepath, character_description)
-    # print(image_prompts)
-    # with open("outputs/20240706_034332_6289cccf/image_prompts.pkl", "wb") as f:
-    #     pickle.dump(image_prompts, f)
+    image_prompts = generate_scene_prompts(scene_filepath, character_description)
+    print(image_prompts)
+    with open("outputs/20240708_044714_338a9909/image_prompts.pkl", "wb") as f:
+        pickle.dump(image_prompts, f)
     
-    with open("outputs/20240706_034332_6289cccf/image_prompts.pkl", "rb") as f:
-        image_prompts = pickle.load(f)
+    # with open("outputs/20240706_034332_6289cccf/image_prompts.pkl", "rb") as f:
+    #     image_prompts = pickle.load(f)
 
     negative_prompts =['nsfw, lowres, (bad), missing limbs, extra limbs']
     prompt = ["1girl, souryuu asuka langley, neon genesis evangelion, solo, upper body, v, smile, looking at viewer, outdoors, night", "2boy, Luffy, Zoro, One Piece, duo, figh, v, smile, looking at viewer, outdoors, night"]

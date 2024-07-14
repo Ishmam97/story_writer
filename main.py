@@ -55,7 +55,7 @@ class CustomCrew:
 
         # Save each task's output
         self.save_output(output_folder, "story.txt", story_writer_task.output.exported_output)
-        self.save_output(output_folder, "character_descriptions.json", character_detailer_task.output.exported_output)
+        self.save_output(output_folder, "character_descriptions.txt", character_detailer_task.output.exported_output)
         self.save_output(output_folder, "scene_descriptions.txt", director_task.output.exported_output)
         self.save_output(output_folder, "illustrations.txt", illustrator_task.output.exported_output)
         # self.save_output(output_folder, "image_prompts.txt", image_prompter_task.output.exported_output)
