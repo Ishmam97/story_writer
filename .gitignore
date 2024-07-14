@@ -9,3 +9,4 @@ TODO
 test.py
 *.ipynb_checkpoints/
 *.ipynb
+/.vscode/
