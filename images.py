@@ -122,13 +122,13 @@ def generate_illustrations(filepath: str) -> list[str]:
 
 def query_illustrator_llama(scene: str, character_desc: str) -> str:
     llm = Ollama(model="llama3")
-    prompt = f'''Generate a detailed and vivid image description for the following scene:
+    prompt = f'''Generate a detailed and vivid description of the scene and charaters in the scene with 50 words or less:
     {scene}
     Characters: {character_desc}
     To generate an excellent image description, follow these guidelines:
     - Be highly specific and descriptive: Instead of "a cat", describe "a fluffy orange tabby cat sitting on a velvet cushion in a sunlit Victorian parlor" for every detail.
-    - Use artistic terms to set the style: Incorporate words like "digital art", "oil painting", "photorealistic", "watercolor", or any other style descriptors that fit the scene.
-    - Specify lighting and mood: Use terms like "soft morning light", "neon-lit", "moody twilight", or other atmospheric descriptors to enhance the ambiance.
+    - Use artistic terms to set the style: Incorporate words like "digital art", "cartoon", "artwork".
+    - Mention the characters in the scene and the background/ambiance.
     - Include textures and colors: Add descriptions of textures (e.g., "smooth marble floor", "rough wooden table") and colors (e.g., "emerald green", "crimson red") to enrich the imagery.
     - Aim for clarity and conciseness: The final description should be highly descriptive yet clear, not exceeding 50 words.
     The final answer should only be the scene description and character description in 50 words or less.
@@ -160,6 +160,7 @@ def generate_image_diffusion(model_name, prompts, negative_prompt, output_dir):
     negative_prompt = json.dumps(negative_prompt)
     
     for idx, prompt in enumerate(prompts):
+        print(f"Generating image fore: {prompt}")
         image = pipe(
             prompt,
             negative_prompt=negative_prompt,
@@ -171,9 +172,31 @@ def generate_image_diffusion(model_name, prompts, negative_prompt, output_dir):
 
         image.save(f"{output_dir}/{idx}.png")
 
+def generate_character_image(model_name, character_name, character_description, output_dir):
+    pipe = DiffusionPipeline.from_pretrained(
+    model_name, 
+    torch_dtype=torch.float16, 
+    use_safetensors=True, 
+    )
+
+    pipe.to('cuda')
+    # to_string negative_prompt
+    negative_prompt = ['nsfw, lowres, (bad), missing limbs, extra limbs']
+    image = pipe(
+        character_description,
+        negative_prompt=negative_prompt,
+        width=1024,
+        height=1024,
+        guidance_scale=7,
+        num_inference_steps=10,
+    ).images[0]
     
+    # save and return output path
+    image.save(f"{output_dir}/{character_name}.png")
+    return f"{output_dir}/{character_name}.png"
+
 def main():
-    run_id = "20240708_044714_338a9909"
+    run_id = "a8581865-a5cf-46c8-b76e-e22cde68da51"
     output_dir = f'outputs/{run_id}/img'
     os.makedirs(output_dir, exist_ok=True)
 
@@ -181,8 +204,8 @@ def main():
     character_description = read_file(f'outputs/{run_id}/character_descriptions.txt')
     
     image_prompts = generate_scene_prompts(scene_filepath, character_description)
-    print(image_prompts)
-    with open("outputs/20240708_044714_338a9909/image_prompts.pkl", "wb") as f:
+
+    with open(f'outputs/{run_id}/image_prompts.pkl', "wb") as f:
         pickle.dump(image_prompts, f)
     
     # with open("outputs/20240706_034332_6289cccf/image_prompts.pkl", "rb") as f:
