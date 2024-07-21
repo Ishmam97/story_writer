@@ -10,3 +10,7 @@ test.py
 *.ipynb_checkpoints/
 *.ipynb
 /.vscode/
+poetry.lock
+*jpg
+*png
+*.safetensors
