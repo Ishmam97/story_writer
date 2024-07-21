@@ -38,11 +38,12 @@ def generate_image_dalle(prompt):
 
     image_url = response.data[0].url
     print(image_url)
-
+    image_dir = f'{time.time()}_image.jpg'
     # save image
-    with open(f'{time.time()}_image.jpg', 'wb') as f:
+    with open(image_dir, 'wb') as f:
         f.write(requests.get(image_url).content)
-    
+    return image_dir
+
 def read_array_from_file(file_path):
     # remove everything after closing bracket "]" and return as eval array
     with open(file_path, "r") as f:
@@ -208,13 +209,16 @@ def main():
     with open(f'outputs/{run_id}/image_prompts.pkl', "wb") as f:
         pickle.dump(image_prompts, f)
     
+    
     # with open("outputs/20240706_034332_6289cccf/image_prompts.pkl", "rb") as f:
     #     image_prompts = pickle.load(f)
 
-    negative_prompts =['nsfw, lowres, (bad), missing limbs, extra limbs']
-    prompt = ["1girl, souryuu asuka langley, neon genesis evangelion, solo, upper body, v, smile, looking at viewer, outdoors, night", "2boy, Luffy, Zoro, One Piece, duo, figh, v, smile, looking at viewer, outdoors, night"]
-    generate_image_diffusion('cagliostrolab/animagine-xl-3.1', image_prompts, negative_prompts, output_dir)    
-    
+    # negative_prompts =['nsfw, lowres, (bad), missing limbs, extra limbs']
+    # prompt = ["1girl, souryuu asuka langley, neon genesis evangelion, solo, upper body, v, smile, looking at viewer, outdoors, night", "2boy, Luffy, Zoro, One Piece, duo, figh, v, smile, looking at viewer, outdoors, night"]
+    for prompts in image_prompts:
+        generate_image_dalle(prompts)  
+        break    
+
 
 if __name__ == "__main__":
     main()
