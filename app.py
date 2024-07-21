@@ -5,6 +5,33 @@ import torch
 import os
 import json
 from images import generate_character_image
+
+def fix_brackets_in_character_descriptions(file_path):
+    with open(file_path, 'r') as file:
+        data = file.read()
+    
+    # Fix the JSON format by adding missing brackets
+    try:
+        # Attempt to load the JSON data
+        json_data = json.loads(data)
+    except json.JSONDecodeError:
+        # If there is a JSON decode error, try to fix the brackets
+        # Add missing opening and closing brackets
+        if not data.startswith('['):
+            data = '[' + data
+        if not data.endswith(']'):
+            data = data + ']'
+        
+        # Attempt to load the fixed JSON data
+        try:
+            json_data = json.loads(data)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"Failed to fix the JSON format: {e}")
+    
+    # Write the fixed JSON data back to the file
+    with open(file_path, 'w') as file:
+        json.dump(json_data, file, indent=4)
+
 st.title("Welcome to Story Writer!")
 
 # User input for the idea
@@ -13,8 +40,8 @@ image_gen_model = "cagliostrolab/animagine-xl-3.1"
 
 # Run the agents
 if st.button("Run"):
-    # run_id = str(uuid.uuid4())
-    run_id = "d120d016-6f6a-48de-8caa-23db189705bb"
+    #run_id = str(uuid.uuid4())
+    run_id = 'a8581865-a5cf-46c8-b76e-e22cde68da51'
     st.write(f"Run ID: {run_id}")
     
     # crew = CustomCrew(idea)
@@ -29,6 +56,10 @@ if st.button("Run"):
     story_file = os.path.join(output_folder, 'story.txt')
     character_descriptions_file = os.path.join(output_folder, 'character_descriptions.txt')
     scene_descriptions_file = os.path.join(output_folder, 'scene_descriptions.txt')
+
+    # Fix character descriptions file
+    if os.path.exists(character_descriptions_file):
+        fix_brackets_in_character_descriptions(character_descriptions_file)
 
     # Display the story file
     st.subheader("Story")
@@ -49,11 +80,6 @@ if st.button("Run"):
                     st.write(f"**Name**: {name}")
                     st.write(f"**Species**: {details['species']}")
                     st.write(f"**Description**: {details['description']}")
-                    st.write("---")
-
-                    # Generate and display character image
-                    img_path = generate_character_image(image_gen_model, name, details['description'], output_folder)
-                    st.image(img_path, caption=name)
                     st.write("---")
     else:
         st.error(f"Character Descriptions file not found: {character_descriptions_file}")

@@ -18,6 +18,7 @@ class CustomAgents():
     gpt35 = ChatOpenAI(
         temperature = 0.9,
         model_name = "gpt-3.5-turbo-0125",
+        api_key="NA"  # Make sure this is correct
     )
     mainModel = LLAMA3
 
